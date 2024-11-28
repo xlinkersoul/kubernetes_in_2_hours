@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-deploy
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx-container
+        image: k-harbor-01.server.maas/library/nginx:latest
+        ports:
+        - containerPort: 80
+        lifecycle:
+          postStart:
+            exec:
+              command: 
+               - /bin/sh
+               - -c
+               - printf '<!DOCTYPE html><html><head><title>Welcome to Kubernetes!</title></head><body><h1>Welcome to Kubernetes in 2.5 Hours!<br>%s </h1></body></html>' "${HOSTNAME}" > /usr/share/nginx/html/index.html
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: nginx-service
+# spec:
+#   selector:
+#     app: nginx
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 80
+#   type: LoadBalancer

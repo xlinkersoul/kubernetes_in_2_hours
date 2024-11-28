@@ -1,0 +1,20 @@
+# helm template grafana -f values.yaml --version 8.3.5 oci://k-harbor-01.server.maas/helm-chart/grafana --insecure-skip-tls-verify
+# helm install my-grafana-release --create-namespace --namespace grafana -f values.yaml --version 8.3.5 oci://k-harbor-01.server.maas/helm-chart/grafana --insecure-skip-tls-verify
+# helm upgrade my-grafana-release --create-namespace --namespace grafana -f values.yaml --version 8.3.5 oci://k-harbor-01.server.maas/helm-chart/grafana --insecure-skip-tls-verify
+global:
+  imageRegistry: "k-harbor-01.server.maas/grafana_image"
+# Administrator credentials when not using an existing secret (see below)
+adminUser: admin
+adminPassword: password
+
+ingress:
+  enabled: true
+  annotations: 
+    kubernetes.io/ingress.class: nginx
+  pathType: Prefix
+  hosts:
+    - grafana.gong.k8s.maas
+
+persistence:
+  type: pvc
+  enabled: true

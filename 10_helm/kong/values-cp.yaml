@@ -1,0 +1,55 @@
+#helm template kong-cp -f values-cp.yaml --version 2.39.3 oci://k-harbor-01.server.maas/helm-chart/kong --insecure-skip-tls-verify
+#helm install kong-cp --create-namespace --namespace kong -f values-cp.yaml --version 2.39.3 oci://k-harbor-01.server.maas/helm-chart/kong --insecure-skip-tls-verify
+#helm upgrade kong-cp --create-namespace --namespace kong -f values-cp.yaml --version 2.39.3 oci://k-harbor-01.server.maas/helm-chart/kong --insecure-skip-tls-verify
+---
+image:
+  repository: k-harbor-01.server.maas/kong_image/kong/kong
+  tag: "3.8.0"
+
+env:
+  prefix: /kong_prefix/
+  database: postgres
+  role: control_plane
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+
+admin:
+  enabled: true
+  http:
+    enabled: true
+    servicePort: 8001
+    containerPort: 8001
+  ingress:
+    enabled: true
+    hostname: kong-api.gong.k8s.maas
+    annotations: 
+     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+     nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    tls: kong-external-cluster-cert
+    path: /
+cluster:
+  enabled: true
+  tls:
+    enabled: true
+    servicePort: 8005
+    containerPort: 8005
+
+proxy:
+  enabled: false
+
+secretVolumes:
+- kong-cluster-cert
+
+postgresql:
+  enabled: true
+  auth:
+    username: kong
+    database: kong
+
+  image:
+    tag: 13.11.0-debian-11-r20
+    registry: k-harbor-01.server.maas
+    repository: kong_image/bitnami/postgresql
+
+ingressController:
+  enabled: false

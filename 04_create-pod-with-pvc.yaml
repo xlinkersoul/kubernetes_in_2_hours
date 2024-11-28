@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nginx-disk
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: "rook-ceph-block"
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-pod
+spec:
+  containers:
+  - name: nginx-container
+    image: k-harbor-01.server.maas/library/nginx:latest
+    volumeMounts:
+    - mountPath: "/nginx-data"
+      name: volume-nginx-data
+    ports:
+    - containerPort: 80
+  volumes:
+      - name: volume-nginx-data
+        persistentVolumeClaim:
+          claimName: nginx-disk

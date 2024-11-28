@@ -1,0 +1,25 @@
+#helm template kong-dp -f values-dp.yaml --version 2.39.3 oci://k-harbor-01.server.maas/helm-chart/kong --insecure-skip-tls-verify
+#helm install kong-dp --create-namespace --namespace kong -f values-dp.yaml --version 2.39.3 oci://k-harbor-01.server.maas/helm-chart/kong --insecure-skip-tls-verify
+#helm upgrade kong-dp --create-namespace --namespace kong -f values-dp.yaml --version 2.39.3 oci://k-harbor-01.server.maas/helm-chart/kong --insecure-skip-tls-verify
+---
+image:
+  repository: kong
+  tag: "3.5"
+
+env:
+  prefix: /kong_prefix/
+  database: "off"
+  role: data_plane
+  cluster_control_plane: kong-cp-kong-cluster.kong.svc.cluster.local:8005
+  lua_ssl_trusted_certificate: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert: /etc/secrets/kong-cluster-cert/tls.crt
+  cluster_cert_key: /etc/secrets/kong-cluster-cert/tls.key
+
+admin:
+  enabled: false
+
+secretVolumes:
+- kong-cluster-cert
+
+ingressController:
+  enabled: false

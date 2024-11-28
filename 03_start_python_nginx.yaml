@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: hello-pod
+spec:
+  containers:
+  - name: nginx-container
+    image: k-harbor-01.server.maas/library/nginx:latest
+    ports:
+    - containerPort: 80
+  - name: python-container
+    image: k-harbor-01.server.maas/library/python:latest
+    command: ["sleep", "36000"]

@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: https
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  name: kong-cp-kong-manager
+  namespace: kong
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: kong-manager.gong.k8s.maas
+    http:
+      paths:
+      - backend:
+          service:
+            name: kong-cp-kong-manager
+            port:
+              number: 8445
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - kong-cp.gong.k8s.maas
+    secretName: kong-cluster-cert
