@@ -13,7 +13,7 @@ ingress:
     kubernetes.io/ingress.class: nginx
   pathType: Prefix
   hosts:
-    - grafana.gong.k8s.maas
+    - grafana.username.play.k8s.maas
 
 persistence:
   type: pvc

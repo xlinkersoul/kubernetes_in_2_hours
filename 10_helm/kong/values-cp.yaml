@@ -21,7 +21,7 @@ admin:
     containerPort: 8001
   ingress:
     enabled: true
-    hostname: kong-api.gong.k8s.maas
+    hostname: kong-api.username.play.k8s.maas
     annotations: 
      nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"

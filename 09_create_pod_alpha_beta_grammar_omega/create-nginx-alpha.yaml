@@ -47,7 +47,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - host: nginx-alpha.gong.k8s.maas
+  - host: nginx-alpha.username.play.k8s.maas
     http:
       paths:
       - path: /
